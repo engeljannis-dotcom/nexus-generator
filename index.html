@@ -78,14 +78,14 @@ body::after{
 /* ── LAYOUT ── */
 #app{
   display:grid;
-  grid-template-rows:48px 1fr 56px;
+  grid-template-rows:48px 1fr 60px;
   height:100vh;
   height:100dvh;
   max-height: -webkit-fill-available;
 }
 @media (max-width: 600px) {
   #app {
-    grid-template-rows: 44px 1fr 52px;
+    grid-template-rows: 44px 1fr 64px;
   }
 }
 #main{
@@ -521,13 +521,25 @@ body::after{
   border-top:2px solid var(--border);
   display:flex;
   align-items:center;
-  padding:0 18px;
-  gap:14px;
+  padding:0 14px;
+  gap:10px;
+  min-height: 60px;
+  height: 60px;
+}
+@media (max-width: 600px) {
+  #footer {
+    padding: 0 10px;
+    gap: 8px;
+    height: 64px;
+    min-height: 64px;
+  }
+  #gen-count-hdr { display: none; }
+  .sep { display: none; }
 }
 
 #gen-btn{
-  height:40px;
-  min-height: 44px;
+  height:52px;
+  min-height: 52px;
   padding:0 32px;
   background:var(--ph);
   border:none;
@@ -542,6 +554,18 @@ body::after{
   position:relative;
   overflow:hidden;
   -webkit-appearance: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+@media (max-width: 800px) {
+  #gen-btn {
+    clip-path: none;
+    border-radius: 2px;
+    flex: 1;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 0 16px;
+  }
 }
 #gen-btn::before{
   content:'';
@@ -564,8 +588,8 @@ body::after{
 
 .transport-mini{display:flex;gap:4px;}
 .t-btn{
-  width:44px;height:44px;
-  min-width:44px;min-height:44px;
+  width:52px;height:52px;
+  min-width:52px;min-height:52px;
   background:var(--raised);
   border:1px solid var(--border);
   color:var(--muted);
@@ -574,6 +598,8 @@ body::after{
   display:flex;align-items:center;justify-content:center;
   transition:all 0.1s;
   -webkit-appearance:none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 .t-btn:hover{border-color:var(--hot);color:var(--text);}
 .t-btn.active{border-color:var(--ph);color:var(--ph);background:rgba(212,255,0,0.07);}
@@ -2087,10 +2113,10 @@ function init() {
     if(e.code==='KeyS')stop();
   });
 
-  // Prevent double-tap zoom on buttons on iOS
-  document.querySelectorAll('button,[onclick]').forEach(el=>{
-    el.addEventListener('touchend',e=>{e.preventDefault();},{passive:false});
-  });
+  // Prevent double-tap zoom on iOS without blocking button clicks
+  document.addEventListener('touchend',e=>{
+    // Only prevent zoom, not clicks — do nothing here (iOS 13+ handles this)
+  },{passive:true});
 
   // Tap on video to generate/play on mobile
   document.getElementById('video-wrap').addEventListener('click',()=>{
