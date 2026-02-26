@@ -43,7 +43,6 @@
 
 html,body{
   width:100%; height:100%;
-  min-height: -webkit-fill-available;
   overflow:hidden;
   background:var(--void);
   color:var(--text);
@@ -55,7 +54,18 @@ html,body{
   touch-action: manipulation;
 }
 
-/* Grain */
+/* ── LAYOUT ── */
+#app{
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display:grid;
+  grid-template-rows:48px 1fr 60px;
+}
+@media (max-width: 600px) {
+  #app {
+    grid-template-rows: 44px 1fr 64px;
+  }
+}
 body::before{
   content:'';
   position:fixed; inset:0;
@@ -77,18 +87,6 @@ body::after{
 
 /* ── LAYOUT ── */
 #app{
-  display:grid;
-  grid-template-rows:48px 1fr 60px;
-  height:100vh;
-  height:100dvh;
-  max-height: -webkit-fill-available;
-}
-@media (max-width: 600px) {
-  #app {
-    grid-template-rows: 44px 1fr 64px;
-  }
-}
-#main{
   display:grid;
   grid-template-columns:1fr 280px;
   overflow:hidden;
@@ -783,10 +781,10 @@ body::after{
   </div>
 
   <footer id="footer">
-    <button id="gen-btn" onclick="G.generate()"><span id="gen-txt">GENERATE</span></button>
+    <button id="gen-btn"><span id="gen-txt">GENERATE</span></button>
     <div class="transport-mini">
-      <button class="t-btn" id="t-stop" onclick="G.stop()">■</button>
-      <button class="t-btn" id="t-play" onclick="G.playPause()">▶</button>
+      <button class="t-btn" id="t-stop">■</button>
+      <button class="t-btn" id="t-play">▶</button>
     </div>
     <div id="progress-wrap"><div id="progress-fill"></div></div>
     <div class="footer-right">
@@ -2106,6 +2104,26 @@ function init() {
 
   startViz();
 
+  // Button event listeners — use both touchstart and click for mobile reliability
+  function addBtn(id, fn) {
+    const el = document.getElementById(id);
+    if(!el) return;
+    let touched = false;
+    el.addEventListener('touchstart', e => {
+      e.preventDefault();
+      touched = true;
+      fn();
+    }, {passive: false});
+    el.addEventListener('click', e => {
+      if(touched){ touched = false; return; }
+      fn();
+    });
+  }
+
+  addBtn('gen-btn', () => generate());
+  addBtn('t-stop',  () => stop());
+  addBtn('t-play',  () => playPause());
+
   // Keyboard
   window.addEventListener('keydown',e=>{
     if(e.code==='Space'){e.preventDefault();generate();}
@@ -2113,10 +2131,7 @@ function init() {
     if(e.code==='KeyS')stop();
   });
 
-  // Prevent double-tap zoom on iOS without blocking button clicks
-  document.addEventListener('touchend',e=>{
-    // Only prevent zoom, not clicks — do nothing here (iOS 13+ handles this)
-  },{passive:true});
+
 
   // Tap on video to generate/play on mobile
   document.getElementById('video-wrap').addEventListener('click',()=>{
