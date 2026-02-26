@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS GENERATOR v3</title>
+<title>NEXUS GENERATOR v4</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#05050a">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
@@ -38,7 +42,8 @@
 *{ box-sizing:border-box; margin:0; padding:0; }
 
 html,body{
-  width:100%; height:100vh;
+  width:100%; height:100%;
+  min-height: -webkit-fill-available;
   overflow:hidden;
   background:var(--void);
   color:var(--text);
@@ -46,6 +51,8 @@ html,body{
   font-size:11px;
   -webkit-font-smoothing:antialiased;
   user-select:none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Grain */
@@ -73,11 +80,30 @@ body::after{
   display:grid;
   grid-template-rows:48px 1fr 56px;
   height:100vh;
+  height:100dvh;
+  max-height: -webkit-fill-available;
+}
+@media (max-width: 600px) {
+  #app {
+    grid-template-rows: 44px 1fr 52px;
+  }
 }
 #main{
   display:grid;
-  grid-template-columns:1fr 320px;
+  grid-template-columns:1fr 280px;
   overflow:hidden;
+}
+@media (max-width: 600px) {
+  #main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  #right-col {
+    display: none !important;
+  }
+  #left-col {
+    grid-template-rows: 1fr 140px !important;
+  }
 }
 
 /* ── HEADER ── */
@@ -501,6 +527,7 @@ body::after{
 
 #gen-btn{
   height:40px;
+  min-height: 44px;
   padding:0 32px;
   background:var(--ph);
   border:none;
@@ -514,6 +541,7 @@ body::after{
   flex-shrink:0;
   position:relative;
   overflow:hidden;
+  -webkit-appearance: none;
 }
 #gen-btn::before{
   content:'';
@@ -536,14 +564,16 @@ body::after{
 
 .transport-mini{display:flex;gap:4px;}
 .t-btn{
-  width:36px;height:40px;
+  width:44px;height:44px;
+  min-width:44px;min-height:44px;
   background:var(--raised);
   border:1px solid var(--border);
   color:var(--muted);
-  font-size:12px;
+  font-size:14px;
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all 0.1s;
+  -webkit-appearance:none;
 }
 .t-btn:hover{border-color:var(--hot);color:var(--text);}
 .t-btn.active{border-color:var(--ph);color:var(--ph);background:rgba(212,255,0,0.07);}
@@ -636,7 +666,7 @@ body::after{
 <div id="app">
 
   <header id="hdr">
-    <div class="logo">NEXUS<sub>GEN v3</sub></div>
+    <div class="logo">NEXUS<sub>GEN v4</sub></div>
     <div class="sep"></div>
     <div class="hdr-info">
       <div id="song-title">—</div>
@@ -841,49 +871,49 @@ const STYLES = [
   {
     name:'LOFI HIP HOP', abbr:'LOFI',
     bpm:[72,92], swing:[45,65], drumDens:0.40, bassDens:0.45, melDens:0.25,
-    padVol:0.50, bassVol:0.60, melVol:0.35, drumVol:0.80,
+    padVol:0.50, bassVol:0.75, melVol:0.40, drumVol:0.80,
     bassType:'smooth', oscType:'triangle', padType:'sawtooth',
-    filterFreq:1800, reverbWet:0.30, delayWet:0.15,
+    filterFreq:1800, reverbWet:0.32, delayWet:0.15,
     vibe:'amber', sectionPattern:['intro','A','A','B','A','B','outro'],
   },
   {
     name:'DARK TECHNO', abbr:'TECHNO',
     bpm:[128,145], swing:[0,10], drumDens:0.62, bassDens:0.65, melDens:0.18,
-    padVol:0.20, bassVol:0.70, melVol:0.20, drumVol:0.90,
+    padVol:0.22, bassVol:0.80, melVol:0.22, drumVol:0.85,
     bassType:'acid', oscType:'sawtooth', padType:'square',
-    filterFreq:600, reverbWet:0.12, delayWet:0.08,
+    filterFreq:600, reverbWet:0.14, delayWet:0.08,
     vibe:'cold', sectionPattern:['intro','A','A','B','A','A','B','A','outro'],
   },
   {
     name:'BOOM BAP', abbr:'BMBP',
     bpm:[85,100], swing:[50,70], drumDens:0.38, bassDens:0.40, melDens:0.30,
-    padVol:0.35, bassVol:0.65, melVol:0.40, drumVol:0.85,
+    padVol:0.38, bassVol:0.78, melVol:0.42, drumVol:0.82,
     bassType:'stab', oscType:'triangle', padType:'sawtooth',
-    filterFreq:2200, reverbWet:0.20, delayWet:0.10,
+    filterFreq:2200, reverbWet:0.22, delayWet:0.12,
     vibe:'dusty', sectionPattern:['intro','A','B','A','B','C','A','outro'],
   },
   {
     name:'MINIMAL TECH', abbr:'MNML',
     bpm:[120,134], swing:[0,8], drumDens:0.55, bassDens:0.60, melDens:0.12,
-    padVol:0.15, bassVol:0.65, melVol:0.15, drumVol:0.85,
+    padVol:0.18, bassVol:0.78, melVol:0.15, drumVol:0.80,
     bassType:'pulse', oscType:'square', padType:'sawtooth',
-    filterFreq:400, reverbWet:0.10, delayWet:0.06,
+    filterFreq:400, reverbWet:0.12, delayWet:0.06,
     vibe:'grey', sectionPattern:['A','A','B','A','A','B','B','A'],
   },
   {
     name:'JAZZY LOFI', abbr:'JAZZ',
     bpm:[68,88], swing:[55,75], drumDens:0.35, bassDens:0.50, melDens:0.35,
-    padVol:0.55, bassVol:0.55, melVol:0.45, drumVol:0.70,
+    padVol:0.55, bassVol:0.70, melVol:0.50, drumVol:0.72,
     bassType:'walking', oscType:'triangle', padType:'triangle',
-    filterFreq:3000, reverbWet:0.35, delayWet:0.12,
+    filterFreq:3000, reverbWet:0.38, delayWet:0.14,
     vibe:'warm', sectionPattern:['intro','A','B','A','B','A','outro'],
   },
   {
     name:'INDUSTRIAL', abbr:'INDST',
     bpm:[136,152], swing:[0,15], drumDens:0.65, bassDens:0.55, melDens:0.15,
-    padVol:0.20, bassVol:0.70, melVol:0.18, drumVol:0.95,
+    padVol:0.22, bassVol:0.78, melVol:0.20, drumVol:0.88,
     bassType:'acid', oscType:'sawtooth', padType:'square',
-    filterFreq:350, reverbWet:0.08, delayWet:0.05,
+    filterFreq:350, reverbWet:0.10, delayWet:0.05,
     vibe:'rust', sectionPattern:['A','A','B','B','A','C','A','B','outro'],
   },
 ];
@@ -1094,12 +1124,36 @@ let soundCache  = new Map();
 
 function initAudio() {
   if(ctx) return;
-  ctx    = new (window.AudioContext||window.webkitAudioContext)({sampleRate:SR});
+  ctx    = new (window.AudioContext||window.webkitAudioContext)({sampleRate:SR,latencyHint:'interactive'});
+
+  // Master Bus: compressor → bass boost EQ → limiter → output
   mComp  = ctx.createDynamicsCompressor();
-  mComp.threshold.value=-16; mComp.ratio.value=4;
-  mComp.attack.value=0.003;  mComp.release.value=0.12;
-  mGain  = ctx.createGain(); mGain.gain.value=0.82;
-  mComp.connect(mGain); mGain.connect(ctx.destination);
+  mComp.threshold.value=-14; mComp.ratio.value=5;
+  mComp.attack.value=0.002;  mComp.release.value=0.10;
+  mComp.knee.value=6;
+
+  // Bass shelf EQ boost (+4dB below 120Hz)
+  const bassEQ = ctx.createBiquadFilter();
+  bassEQ.type = 'lowshelf';
+  bassEQ.frequency.value = 120;
+  bassEQ.gain.value = 4.5;
+
+  // High shelf cut (soften highs, -3dB above 8kHz)
+  const hiCut = ctx.createBiquadFilter();
+  hiCut.type = 'highshelf';
+  hiCut.frequency.value = 8000;
+  hiCut.gain.value = -3.5;
+
+  // Limiter
+  const limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value = -1;
+  limiter.ratio.value = 20;
+  limiter.attack.value = 0.001;
+  limiter.release.value = 0.05;
+  limiter.knee.value = 0;
+
+  mGain  = ctx.createGain(); mGain.gain.value=0.78;
+  mComp.connect(bassEQ); bassEQ.connect(hiCut); hiCut.connect(limiter); limiter.connect(mGain); mGain.connect(ctx.destination);
 
   // Reverb
   buildReverbIR(0.5);
@@ -1183,18 +1237,23 @@ function mixN(...pairs){
 // ── DRUM SYNTHS ───────────────────────────────────────────
 
 function dspKick(tune=1,decay=0.5,punch=0.6,dist=0.2) {
-  const n=Math.floor(SR*0.85);
-  const sub=pitchSweep(n,165*tune,36*tune);
-  const sEnv=envExp(n,decay*390);
+  const n=Math.floor(SR*1.1);
+  // Deep sub sweep — 100Hz down to 28Hz for massive bass
+  const sub=pitchSweep(n,120*tune,28*tune);
+  const sEnv=envExp(n,decay*500);
   for(let i=0;i<n;i++)sub[i]*=sEnv[i];
-  const subF=sat(biquadLP(sub,130+tune*25,0.8),1.2+dist*2.2);
-  const click=biquadBP(wNoise(n),3200+punch*2000,1.8);
-  const cEnv=envExp(n,6);
-  for(let i=0;i<n;i++)click[i]*=cEnv[i]*(0.12+punch*0.5);
-  const thump=biquadBP(wNoise(n),320,2.2);
-  const tEnv=envExp(n,20);
-  for(let i=0;i<n;i++)thump[i]*=tEnv[i]*(0.12+punch*0.32);
-  return norm(mixN(subF,1,click,1,thump,1));
+  // Add second sub layer (pure sine) for warmth
+  const sub2=new Float32Array(n);
+  for(let i=0;i<n;i++)sub2[i]=Math.sin(2*Math.PI*50*tune*i/SR)*Math.exp(-i/(SR*0.25));
+  const subF=sat(biquadLP(sub,100+tune*20,0.9),1.0+dist*1.8);
+  // Softer click (less harsh transient)
+  const click=biquadBP(wNoise(n),2000+punch*1200,1.5);
+  const cEnv=envExp(n,4);
+  for(let i=0;i<n;i++)click[i]*=cEnv[i]*(0.06+punch*0.22);
+  const thump=biquadBP(wNoise(n),200,2.5);
+  const tEnv=envExp(n,28);
+  for(let i=0;i<n;i++)thump[i]*=tEnv[i]*(0.18+punch*0.42);
+  return norm(mixN(subF,1.0,sub2,0.7,click,1,thump,1));
 }
 
 function dspSnare(tune=1,decay=0.5,snap=0.5,body=0.5) {
@@ -1217,18 +1276,21 @@ function dspSnare(tune=1,decay=0.5,snap=0.5,body=0.5) {
 }
 
 function dspHihat(open=false,tune=1,decay=0.5) {
-  const n=open?Math.floor(SR*0.65):Math.floor(SR*0.09);
+  const n=open?Math.floor(SR*0.75):Math.floor(SR*0.11);
   const t=Float32Array.from({length:n},(_,i)=>i/SR);
-  const dm=open?decay*370:decay*18;
+  const dm=open?decay*450:decay*22;
   const out=new Float32Array(n);
-  [545,1030,1475,2280,3415,5765].forEach((f,fi)=>{
-    const e=envExp(n,dm/(1+fi*0.14)),ph=Math.random()*Math.PI*2;
-    for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*f*tune*t[i]+ph)*(1/(fi+1.5))*e[i];
+  // Lower frequency metallic partials (less piercing)
+  [380,720,1050,1680,2650,4200].forEach((f,fi)=>{
+    const e=envExp(n,dm/(1+fi*0.18)),ph=Math.random()*Math.PI*2;
+    for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*f*tune*t[i]+ph)*(1/(fi+2))*e[i];
   });
-  const hn=biquadHP(wNoise(n),open?6200:8000,0.6);
+  // Lower cutoff for noise (less bright)
+  const hn=biquadHP(wNoise(n),open?3500:5000,0.5);
+  const hLP=biquadLP(hn,open?9000:12000,0.7); // cut ultra-high
   const hEnv=envExp(n,dm*1.1);
-  for(let i=0;i<n;i++)hn[i]*=hEnv[i]*0.45;
-  return norm(mixN(out,0.5,hn,1));
+  for(let i=0;i<n;i++)hLP[i]*=hEnv[i]*0.30;
+  return norm(mixN(out,0.65,hLP,1));
 }
 
 function dspClap(decay=0.4,room=0.3) {
@@ -1256,64 +1318,125 @@ function dspPerc(tune=1,decay=0.3) {
 }
 
 function dspBass(freq,oscType='sawtooth',decay=0.5,dist=0.1) {
-  const n=Math.floor(SR*1.1);
+  const n=Math.floor(SR*1.4);
   const t=Float32Array.from({length:n},(_,i)=>i/SR);
   let wave=new Float32Array(n);
+  let subSine=new Float32Array(n);
 
-  if(oscType==='sawtooth') {
-    // Sägezahn: Fourier-Synthese (8 Partials)
-    for(let k=1;k<=8;k++) for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*k*t[i])/(k*Math.PI);
-  } else if(oscType==='square') {
-    for(let k=1;k<=9;k+=2) for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*k*t[i])/(k*(Math.PI/4));
+  // Always add deep sub-sine layer for weight
+  for(let i=0;i<n;i++)subSine[i]=Math.sin(2*Math.PI*freq*t[i]);
+
+  if(oscType==='sawtooth'||oscType==='acid') {
+    // Rich sawtooth: 12 Partials
+    for(let k=1;k<=12;k++) for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*k*t[i])/(k*Math.PI);
+    // Add slight detune for fatness
+    for(let k=1;k<=6;k++) for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*k*1.003*t[i])/(k*Math.PI*1.8);
+  } else if(oscType==='square'||oscType==='pulse') {
+    for(let k=1;k<=11;k+=2) for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*k*t[i])/(k*(Math.PI/4));
   } else {
-    // Triangle/Smooth: FM Sub
+    // Triangle/Smooth: FM with sub warmth
     const mod=new Float32Array(n);
-    for(let i=0;i<n;i++){mod[i]=Math.sin(2*Math.PI*freq*2*t[i])*2.2;wave[i]=Math.sin(2*Math.PI*freq*t[i]+mod[i]);}
+    for(let i=0;i<n;i++){mod[i]=Math.sin(2*Math.PI*freq*2*t[i])*2.5;wave[i]=Math.sin(2*Math.PI*freq*t[i]+mod[i]);}
+    // Add warm second partial
+    for(let i=0;i<n;i++)wave[i]+=Math.sin(2*Math.PI*freq*0.5*t[i])*0.4; // sub octave
   }
-  const env=envExp(n,decay*720);
-  for(let i=0;i<n;i++)wave[i]*=env[i];
-  const lp=biquadLP(wave,220+freq*0.8,1.2);
-  return norm(sat(lp,1.4+dist*1.6));
+
+  // Mix sub more prominently for bass weight
+  const mixed=mixN(wave,0.65,subSine,0.55);
+  const env=envExp(n,decay*900);
+  for(let i=0;i<n;i++)mixed[i]*=env[i];
+  // Filter around 180Hz for punchy bass, not boxy
+  const lp=biquadLP(mixed,180+freq*0.6,0.9);
+  return norm(sat(lp,1.2+dist*1.2));
 }
 
 function dspPad(notes,oscType='sawtooth',filterFreq=1800,duration=0.5) {
-  // Polyphoner Pad — mehrere Sinuspartials für jeden Akkordton
-  const n=Math.floor(SR*Math.max(0.3,duration));
+  // Rich polyphonic pad — multiple layers with detuning for width/warmth
+  const n=Math.floor(SR*Math.max(0.5,duration));
   const t=Float32Array.from({length:n},(_,i)=>i/SR);
   const out=new Float32Array(n);
 
   notes.forEach(midiNote=>{
     const freq=440*Math.pow(2,(midiNote-69)/12);
-    // Leichtes Detune (+/- ein paar Cents) für Wärme
-    const detune=1+(Math.random()-0.5)*0.004;
-    if(oscType==='sawtooth'){
-      for(let k=1;k<=5;k++) for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*freq*detune*k*t[i])/(k*Math.PI*notes.length);
-    } else if(oscType==='triangle'){
-      for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*freq*detune*t[i])/notes.length;
-    } else {
-      for(let k=1;k<=4;k+=2) for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*freq*detune*k*t[i])/(k*(Math.PI/4)*notes.length);
-    }
+    // 3 detuned oscillators per note (chorus effect)
+    const detunes=[0, 0.0025, -0.0025];
+    detunes.forEach((dt,di)=>{
+      const f=freq*(1+dt);
+      const vol=di===0?0.6:0.3;
+      if(oscType==='sawtooth'){
+        for(let k=1;k<=6;k++) for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*f*k*t[i])/(k*Math.PI*notes.length)*vol;
+      } else if(oscType==='triangle'){
+        // Triangle + 2nd partial for warmth
+        for(let i=0;i<n;i++)out[i]+=(Math.sin(2*Math.PI*f*t[i])+Math.sin(2*Math.PI*f*2*t[i])*0.25)/notes.length*vol;
+      } else {
+        for(let k=1;k<=5;k+=2) for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*f*k*t[i])/(k*(Math.PI/4)*notes.length)*vol;
+      }
+    });
+    // Sub octave layer for warmth (+1 octave below = freq/2)
+    const subFreq=freq/2;
+    for(let i=0;i<n;i++)out[i]+=Math.sin(2*Math.PI*subFreq*t[i])*0.12/notes.length;
   });
 
-  const attackSamples=Math.floor(SR*0.06);
-  const env=envExp(n,duration*700);
-  for(let i=0;i<n;i++){const atk=Math.min(1,i/attackSamples);out[i]*=atk*env[i];}
-  const lp=biquadLP(out,filterFreq,0.7);
+  // Slow attack for pads (more natural, less click)
+  const attackSamples=Math.floor(SR*0.12);
+  const releaseSamples=Math.floor(SR*0.18);
+  const env=envExp(n,duration*900);
+  for(let i=0;i<n;i++){
+    const atk=Math.min(1,i/attackSamples);
+    // Fade out end
+    const rel=i>n-releaseSamples?Math.max(0,1-(i-(n-releaseSamples))/releaseSamples):1;
+    out[i]*=atk*env[i]*rel;
+  }
+  // Gentle filter (not too bright)
+  const lp=biquadLP(out,Math.min(filterFreq,3500),0.65);
   return norm(lp);
 }
 
 function dspMelody(freq,duration,oscType='triangle') {
-  const n=Math.floor(SR*Math.max(0.08,duration));
+  const n=Math.floor(SR*Math.max(0.12,duration));
   const t=Float32Array.from({length:n},(_,i)=>i/SR);
   const out=new Float32Array(n);
-  // EP-artiger Klang: Sinus + Oberton
+
+  // Warm Rhodes/EP style: fundamental + soft harmonics, NO harsh high partials
+  // Slight FM for bell-like warmth without the pip
+  const fmDepth = 1.8;
+  const fmRatio = 2.01; // slightly detuned for liveliness
   for(let i=0;i<n;i++){
-    out[i]=Math.sin(2*Math.PI*freq*t[i])+Math.sin(2*Math.PI*freq*2*t[i])*0.3;
+    const fm=Math.sin(2*Math.PI*freq*fmRatio*t[i])*fmDepth;
+    out[i]=Math.sin(2*Math.PI*freq*t[i]+fm)*0.7;
+    // Add soft octave for warmth
+    out[i]+=Math.sin(2*Math.PI*freq*0.5*t[i])*0.2; // sub octave
+    out[i]+=Math.sin(2*Math.PI*freq*2*t[i])*0.12;   // 2nd harmonic only (soft)
   }
-  const attackS=Math.floor(SR*0.01);
-  const env=envExp(n,duration*600);
-  for(let i=0;i<n;i++){out[i]*=env[i]*Math.min(1,i/attackS);}
-  return norm(biquadLP(out,4200,0.8));
+  // Slower attack — no click
+  const attackS=Math.floor(SR*0.018);
+  const env=envExp(n,duration*800);
+  const relS=Math.floor(SR*0.05);
+  for(let i=0;i<n;i++){
+    const atk=Math.min(1,i/attackS);
+    const rel=i>n-relS?Math.max(0,(n-i)/relS):1;
+    out[i]*=env[i]*atk*rel;
+  }
+  // Filter at 3kHz — warm, no harsh highs
+  return norm(biquadLP(out,3000,0.7));
+}
+
+// Harmony note for melody (adds a harmonic interval above/below)
+function dspMelodyHarmony(freq,duration,intervalSemitones=7) {
+  const harmFreq=freq*Math.pow(2,intervalSemitones/12);
+  const n=Math.floor(SR*Math.max(0.12,duration));
+  const t=Float32Array.from({length:n},(_,i)=>i/SR);
+  const out=new Float32Array(n);
+  const fmD=1.2;
+  for(let i=0;i<n;i++){
+    const fm=Math.sin(2*Math.PI*harmFreq*2*t[i])*fmD;
+    out[i]=Math.sin(2*Math.PI*harmFreq*t[i]+fm)*0.5;
+    out[i]+=Math.sin(2*Math.PI*harmFreq*0.5*t[i])*0.15;
+  }
+  const attackS=Math.floor(SR*0.02);
+  const env=envExp(n,duration*700);
+  for(let i=0;i<n;i++)out[i]*=env[i]*Math.min(1,i/attackS);
+  return norm(biquadLP(out,2600,0.7));
 }
 
 function floatToBuffer(data) {
@@ -1459,12 +1582,19 @@ function scheduleAllTracks(sec, si, step, localStep, when) {
   const melNotes = sec.melody;
   if(melNotes && melNotes[step]) {
     const mn = melNotes[step];
-    const key=`mel_${mn.midi}`;
+    const dur = mn.len==='4n'?0.38:mn.len==='8n'?0.20:0.11;
+    const key=`mel_${mn.midi}_${mn.len}`;
     if(!soundCache.has(key)){
-      const dur = mn.len==='4n'?0.35:mn.len==='8n'?0.18:0.09;
       soundCache.set(key,floatToBuffer(dspMelody(mn.freq,dur,style.oscType)));
     }
     schedPlay(soundCache.get(key),when,mn.vel*style.melVol,style.reverbWet>0.1,false);
+    // Harmony: add a 3rd or 5th above for richer sound (prob 60%)
+    const harmKey=`mel_harm_${mn.midi}_${mn.len}`;
+    if(!soundCache.has(harmKey)){
+      const interval=mn.midi%3===0?4:7; // alternates between major third and fifth
+      soundCache.set(harmKey,floatToBuffer(dspMelodyHarmony(mn.freq,dur,interval)));
+    }
+    if(Math.random()<0.6) schedPlay(soundCache.get(harmKey),when,mn.vel*style.melVol*0.45,style.reverbWet>0.1,false);
   }
 
   // Pad: alle 4 Steps (=1 Beat) → Akkordwechsel
@@ -1506,20 +1636,31 @@ function updateSeqUI(step, secIdx, globalStep, totalSteps) {
 function prerenderSounds(sg) {
   soundCache.clear();
   drumBuffers = {};
-  drumBuffers.kick    = floatToBuffer(norm(dspKick(1,0.5,0.6,0.2)));
-  drumBuffers.snare   = floatToBuffer(norm(dspSnare(1,0.4,0.5,0.5)));
-  drumBuffers.clap    = floatToBuffer(norm(dspClap(0.4,0.3)));
-  drumBuffers.hihat   = floatToBuffer(norm(dspHihat(false,1,0.35)));
-  drumBuffers.openhat = floatToBuffer(norm(dspHihat(true,1,0.55)));
-  drumBuffers.perc    = floatToBuffer(norm(dspPerc(1,0.3)));
+  const s=sg.style;
+  // Style-tuned drum parameters
+  const isElectronic = ['DARK TECHNO','MINIMAL TECH','INDUSTRIAL'].includes(s.name);
+  const kickDecay   = isElectronic ? 0.45 : 0.55;
+  const kickPunch   = isElectronic ? 0.7  : 0.5;
+  const kickDist    = isElectronic ? 0.25 : 0.12;
+  const snareDecay  = isElectronic ? 0.35 : 0.45;
+  const snareSnap   = isElectronic ? 0.6  : 0.45;
+  const snareBody   = isElectronic ? 0.4  : 0.6;
 
-  // Pad-Buffers pro Akkord
+  drumBuffers.kick    = floatToBuffer(norm(dspKick(1,kickDecay,kickPunch,kickDist)));
+  drumBuffers.snare   = floatToBuffer(norm(dspSnare(1,snareDecay,snareSnap,snareBody)));
+  drumBuffers.clap    = floatToBuffer(norm(dspClap(0.45,0.35)));
+  drumBuffers.hihat   = floatToBuffer(norm(dspHihat(false,1,0.30)));
+  drumBuffers.openhat = floatToBuffer(norm(dspHihat(true,1,0.50)));
+  drumBuffers.perc    = floatToBuffer(norm(dspPerc(1,0.32)));
+
+  // Pad-Buffers pro Akkord — use full bar + a bit extra for overlap
   sg.progression.forEach((chord, ci)=>{
+    const padNotes=chord.notes.filter(n=>n>=50&&n<=80).slice(0,5);
     const padBuf=floatToBuffer(dspPad(
-      chord.notes.filter(n=>n>=50&&n<=80).slice(0,4),
+      padNotes,
       sg.style.padType,
       sg.style.filterFreq,
-      (60/sg.bpm)*4  // 1 Bar Länge
+      (60/sg.bpm)*4.2  // slightly longer than 1 bar for smooth legato
     ));
     soundCache.set(`pad_${ci}`, padBuf);
   });
@@ -1946,6 +2087,16 @@ function init() {
     if(e.code==='KeyS')stop();
   });
 
+  // Prevent double-tap zoom on buttons on iOS
+  document.querySelectorAll('button,[onclick]').forEach(el=>{
+    el.addEventListener('touchend',e=>{e.preventDefault();},{passive:false});
+  });
+
+  // Tap on video to generate/play on mobile
+  document.getElementById('video-wrap').addEventListener('click',()=>{
+    if(!song)generate();
+  });
+
   // Idle Video
   if(vidRAF)cancelAnimationFrame(vidRAF);
   const idleCanvas=document.getElementById('vid-canvas');
@@ -1953,18 +2104,17 @@ function init() {
     if(song){vidRAF=null;return;}
     const w=idleCanvas.width||640,h=idleCanvas.height||300;
     const c=idleCanvas.getContext('2d');
-    c.fillStyle='#03030800'; c.fillRect(0,0,w,h);
-    // Idle: einfaches Rauschen
     c.fillStyle='#05050a'; c.fillRect(0,0,w,h);
     c.fillStyle='#d4ff0008';
     for(let y=0;y<h;y+=4){c.fillRect(0,y,w,1);}
     c.fillStyle='rgba(212,255,0,0.03)';
     const t2=ts/1000;
     for(let x=0;x<w;x+=6){const yy=h/2+Math.sin(x*0.04+t2*0.8)*30;c.fillRect(x,yy,2,2);}
-    c.font=`${Math.floor(h*0.18)}px Bebas Neue, sans-serif`;
-    c.fillStyle='rgba(212,255,0,0.04)';
+    c.font=`${Math.floor(h*0.15)}px Bebas Neue, sans-serif`;
+    c.fillStyle='rgba(212,255,0,0.07)';
     c.textAlign='center';
-    c.fillText('PRESS SPACE',w/2,h*0.55);
+    const txt=window.innerWidth<600?'TAP TO GENERATE':'PRESS SPACE';
+    c.fillText(txt,w/2,h*0.55);
     c.textAlign='left';
     vidRAF=requestAnimationFrame(idleFrame);
   }
