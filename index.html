@@ -88,20 +88,23 @@ body::after{
 /* ── LAYOUT ── */
 #app{
   display:grid;
+  grid-template-rows:48px 1fr 60px;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+#main{
+  display:grid;
   grid-template-columns:1fr 280px;
   overflow:hidden;
 }
-@media (max-width: 600px) {
-  #main {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
-  }
-  #right-col {
-    display: none !important;
-  }
-  #left-col {
-    grid-template-rows: 1fr 140px !important;
-  }
+@media (max-width:700px){
+  #app{ grid-template-rows:44px 1fr auto; }
+  #main{ grid-template-columns:1fr; }
+  #right-col{ display:none!important; }
+  #left-col{ grid-template-rows:1fr 130px!important; }
+  #hdr .sep, #gen-count-hdr, .hdr-chips .chip.key, .hdr-chips .chip.style{ display:none; }
+  #song-title{ font-size:15px; max-width:160px; }
 }
 
 /* ── HEADER ── */
@@ -521,18 +524,80 @@ body::after{
   align-items:center;
   padding:0 14px;
   gap:10px;
-  min-height: 60px;
-  height: 60px;
+  height:60px;
 }
-@media (max-width: 600px) {
-  #footer {
-    padding: 0 10px;
-    gap: 8px;
-    height: 64px;
-    min-height: 64px;
+@media (max-width:700px){
+  #footer{
+    flex-wrap:wrap;
+    height:auto;
+    padding:8px 10px;
+    gap:6px;
   }
-  #gen-count-hdr { display: none; }
-  .sep { display: none; }
+  #progress-wrap{ display:none; }
+  .footer-right{ display:none; }
+  #gen-btn{ height:46px; min-height:46px; }
+  .t-btn{ width:46px; height:46px; min-width:46px; min-height:46px; }
+}
+.footer-row1{display:contents;}
+.footer-row2{display:contents;}
+@media (max-width:700px){
+  .footer-row1{display:flex;align-items:center;gap:8px;width:100%;}
+  .footer-row2{display:flex;align-items:center;gap:8px;width:100%;}
+}
+
+/* BPM Control */
+#bpm-control{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  flex-shrink:0;
+}
+#bpm-control label{
+  font-size:7px;
+  letter-spacing:2px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+#bpm-display{
+  font-family:var(--disp);
+  font-size:16px;
+  color:var(--ph);
+  letter-spacing:2px;
+  line-height:1;
+  min-width:38px;
+  text-align:center;
+}
+#bpm-slider{
+  -webkit-appearance:none;
+  appearance:none;
+  width:80px;
+  height:3px;
+  background:var(--raised);
+  border:1px solid var(--border);
+  outline:none;
+  cursor:pointer;
+}
+#bpm-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--ph);
+  cursor:pointer;
+  border:none;
+}
+#bpm-slider::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--ph);
+  cursor:pointer;
+  border:none;
+}
+@media (max-width:700px){
+  #bpm-control{ flex-direction:row; gap:8px; align-items:center; }
+  #bpm-slider{ width:100px; }
 }
 
 #gen-btn{
@@ -781,15 +846,24 @@ body::after{
   </div>
 
   <footer id="footer">
-    <button id="gen-btn"><span id="gen-txt">GENERATE</span></button>
-    <div class="transport-mini">
-      <button class="t-btn" id="t-stop">■</button>
-      <button class="t-btn" id="t-play">▶</button>
+    <div class="footer-row1">
+      <button id="gen-btn"><span id="gen-txt">GENERATE</span></button>
+      <div class="transport-mini">
+        <button class="t-btn" id="t-stop">■</button>
+        <button class="t-btn" id="t-play">▶</button>
+      </div>
+      <div id="progress-wrap"><div id="progress-fill"></div></div>
+      <div class="footer-right">
+        <div id="gen-num">#000</div>
+        <div id="gen-status">READY</div>
+      </div>
     </div>
-    <div id="progress-wrap"><div id="progress-fill"></div></div>
-    <div class="footer-right">
-      <div id="gen-num">#000</div>
-      <div id="gen-status">READY</div>
+    <div class="footer-row2">
+      <div id="bpm-control">
+        <label>BPM</label>
+        <div id="bpm-display">—</div>
+        <input type="range" id="bpm-slider" min="60" max="180" value="120" step="1">
+      </div>
     </div>
   </footer>
 
@@ -895,7 +969,7 @@ const STYLES = [
   {
     name:'LOFI HIP HOP', abbr:'LOFI',
     bpm:[72,92], swing:[45,65], drumDens:0.40, bassDens:0.45, melDens:0.25,
-    padVol:0.50, bassVol:0.75, melVol:0.40, drumVol:0.80,
+    padVol:0.22, bassVol:0.82, melVol:0.20, drumVol:0.92,
     bassType:'smooth', oscType:'triangle', padType:'sawtooth',
     filterFreq:1800, reverbWet:0.32, delayWet:0.15,
     vibe:'amber', sectionPattern:['intro','A','A','B','A','B','outro'],
@@ -903,7 +977,7 @@ const STYLES = [
   {
     name:'DARK TECHNO', abbr:'TECHNO',
     bpm:[128,145], swing:[0,10], drumDens:0.62, bassDens:0.65, melDens:0.18,
-    padVol:0.22, bassVol:0.80, melVol:0.22, drumVol:0.85,
+    padVol:0.12, bassVol:0.88, melVol:0.14, drumVol:0.95,
     bassType:'acid', oscType:'sawtooth', padType:'square',
     filterFreq:600, reverbWet:0.14, delayWet:0.08,
     vibe:'cold', sectionPattern:['intro','A','A','B','A','A','B','A','outro'],
@@ -911,7 +985,7 @@ const STYLES = [
   {
     name:'BOOM BAP', abbr:'BMBP',
     bpm:[85,100], swing:[50,70], drumDens:0.38, bassDens:0.40, melDens:0.30,
-    padVol:0.38, bassVol:0.78, melVol:0.42, drumVol:0.82,
+    padVol:0.18, bassVol:0.85, melVol:0.22, drumVol:0.92,
     bassType:'stab', oscType:'triangle', padType:'sawtooth',
     filterFreq:2200, reverbWet:0.22, delayWet:0.12,
     vibe:'dusty', sectionPattern:['intro','A','B','A','B','C','A','outro'],
@@ -919,7 +993,7 @@ const STYLES = [
   {
     name:'MINIMAL TECH', abbr:'MNML',
     bpm:[120,134], swing:[0,8], drumDens:0.55, bassDens:0.60, melDens:0.12,
-    padVol:0.18, bassVol:0.78, melVol:0.15, drumVol:0.80,
+    padVol:0.10, bassVol:0.85, melVol:0.12, drumVol:0.90,
     bassType:'pulse', oscType:'square', padType:'sawtooth',
     filterFreq:400, reverbWet:0.12, delayWet:0.06,
     vibe:'grey', sectionPattern:['A','A','B','A','A','B','B','A'],
@@ -927,7 +1001,7 @@ const STYLES = [
   {
     name:'JAZZY LOFI', abbr:'JAZZ',
     bpm:[68,88], swing:[55,75], drumDens:0.35, bassDens:0.50, melDens:0.35,
-    padVol:0.55, bassVol:0.70, melVol:0.50, drumVol:0.72,
+    padVol:0.20, bassVol:0.78, melVol:0.25, drumVol:0.85,
     bassType:'walking', oscType:'triangle', padType:'triangle',
     filterFreq:3000, reverbWet:0.38, delayWet:0.14,
     vibe:'warm', sectionPattern:['intro','A','B','A','B','A','outro'],
@@ -935,7 +1009,7 @@ const STYLES = [
   {
     name:'INDUSTRIAL', abbr:'INDST',
     bpm:[136,152], swing:[0,15], drumDens:0.65, bassDens:0.55, melDens:0.15,
-    padVol:0.22, bassVol:0.78, melVol:0.20, drumVol:0.88,
+    padVol:0.10, bassVol:0.85, melVol:0.12, drumVol:0.95,
     bassType:'acid', oscType:'sawtooth', padType:'square',
     filterFreq:350, reverbWet:0.10, delayWet:0.05,
     vibe:'rust', sectionPattern:['A','A','B','B','A','C','A','B','outro'],
@@ -955,7 +1029,7 @@ function buildSongStructure(seed) {
   const R = mkRNG(seed);
 
   const style     = pick(STYLES, R);
-  const bpm       = rInt(style.bpm[0], style.bpm[1], R);
+  const bpm       = bpmOverride !== null ? bpmOverride : rInt(style.bpm[0], style.bpm[1], R);
   const swingPct  = rInt(style.swing[0], style.swing[1], R);
   const rootName  = pick(ROOTS, R);
   const rootMidi  = ROOT_MIDI[rootName];
@@ -1495,6 +1569,7 @@ let songTime = 0;
 let vidPhase = 0;
 let lastTs   = 0;
 let vidRAF   = null;
+let bpmOverride = null; // null = use style range, number = locked BPM
 let vizRAF   = null;
 let seqTimer = null;
 let absStep  = 0;        // globaler Step-Zähler
@@ -1578,13 +1653,15 @@ function scheduleAllTracks(sec, si, step, localStep, when) {
   const style = song.style;
   const sect  = sec.name;
 
-  // Drums
+  // Drums - per-type volume multipliers
+  const drumVolMult = {kick:1.0, snare:0.88, clap:0.75, hihat:0.45, openhat:0.40, perc:0.35};
   STEP_ROWS.forEach(row=>{
     const pat = sec.drums[row.key];
     if(pat && pat[step]) {
       const buf = drumBuffers[row.key];
       if(buf) {
-        schedPlay(buf, when, style.drumVol*(0.75+Math.random()*0.25));
+        const mult = drumVolMult[row.key] || 0.7;
+        schedPlay(buf, when, style.drumVol * mult * (0.8+Math.random()*0.2));
         vuLevels[row.key] = 1.0;
       }
     }
@@ -1618,7 +1695,7 @@ function scheduleAllTracks(sec, si, step, localStep, when) {
       const interval=mn.midi%3===0?4:7; // alternates between major third and fifth
       soundCache.set(harmKey,floatToBuffer(dspMelodyHarmony(mn.freq,dur,interval)));
     }
-    if(Math.random()<0.6) schedPlay(soundCache.get(harmKey),when,mn.vel*style.melVol*0.45,style.reverbWet>0.1,false);
+    if(Math.random()<0.6) schedPlay(soundCache.get(harmKey),when,mn.vel*style.melVol*0.28,style.reverbWet>0.1,false);
   }
 
   // Pad: alle 4 Steps (=1 Beat) → Akkordwechsel
@@ -2028,6 +2105,9 @@ async function generate() {
   buildChordRow(song);
   buildMixRow(song);
   updateInfoPanel(song, genCount);
+  // Sync BPM slider to actual generated BPM
+  const sl = document.getElementById('bpm-slider');
+  if(sl){ sl.value = song.bpm; document.getElementById('bpm-display').textContent = song.bpm; bpmOverride = song.bpm; }
   initVideo(song);
   startViz();
 
@@ -2123,6 +2203,20 @@ function init() {
   addBtn('gen-btn', () => generate());
   addBtn('t-stop',  () => stop());
   addBtn('t-play',  () => playPause());
+
+  // BPM Slider
+  const bpmSlider = document.getElementById('bpm-slider');
+  const bpmDisplay = document.getElementById('bpm-display');
+  function updateBpmSlider(){
+    const val = parseInt(bpmSlider.value);
+    bpmOverride = val;
+    bpmDisplay.textContent = val;
+    // Live BPM change if playing
+    if(song){ song.bpm = val; document.getElementById('i-bpm').textContent=val; document.getElementById('vid-bpm').textContent=val; }
+  }
+  bpmSlider.addEventListener('input', updateBpmSlider);
+  bpmSlider.addEventListener('change', updateBpmSlider);
+  updateBpmSlider();
 
   // Keyboard
   window.addEventListener('keydown',e=>{
